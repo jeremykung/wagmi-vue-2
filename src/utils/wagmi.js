@@ -5,6 +5,7 @@ import {
   disconnect,
   fetchBalance,
   sendTransaction,
+  signMessage,
   InjectedConnector,
   mainnet,
   sepolia,
@@ -56,6 +57,13 @@ const wagmi = {
       to: toAddress,
       value: parseEther(ethAmount)
     })
+    console.log('wagmi send transaction:', result)
+  },
+  async signMessage(message) {
+    const signature = await signMessage({
+      message: message,
+    })
+    console.log('wagmi sign message:', signature)
   }
 }
 
