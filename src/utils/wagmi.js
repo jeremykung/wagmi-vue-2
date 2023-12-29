@@ -1,18 +1,23 @@
+import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 import {
   createConfig,
   configureChains,
+  InjectedConnector,
   connect,
   disconnect,
+  getAccount,
   fetchBalance,
   sendTransaction,
   signMessage,
-  InjectedConnector,
+  switchNetwork,
   mainnet,
-  sepolia,
-  getAccount
+  sepolia
 } from '@wagmi/core'
 import { parseEther } from 'viem'
 import { publicProvider } from '@wagmi/core/providers/public'
+
+import { useAccountStore } from '@/stores/accountStore'
+// const accountStore = useAccountStore()
 
 const wagmi = {
   config() {
@@ -30,15 +35,26 @@ const wagmi = {
     console.log('wagmi config:', config)
     return config
   },
+  // connector() {
+  //   const connector = new InjectedConnector({
+  //     chains: [mainnet, sepolia]
+  //   })
+  //   console.log('wagmi connector:', connector)
+  // },
   connector() {
-    const connector = new InjectedConnector({
-      chains: [mainnet, sepolia]
+    const connector = new WalletConnectConnector({
+      chains: [mainnet, sepolia],
+      options: {
+        projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID
+      }
     })
     console.log('wagmi connector:', connector)
   },
   async connect() {
     const result = await connect({ connector: new InjectedConnector() })
     console.log('wagmi connect:', result)
+    console.log('account address:', result.account)
+    // accountStore.setAddress(result.account)
   },
   async disconnect() {
     const result = await disconnect()
@@ -61,9 +77,19 @@ const wagmi = {
   },
   async signMessage(message) {
     const signature = await signMessage({
-      message: message,
+      message: message
     })
     console.log('wagmi sign message:', signature)
+  },
+  async switchNetwork(chainId) {
+    const network = await switchNetwork({
+      chainId: chainId
+    })
+    console.log('wagmi switch network:', network)
+  },
+  getAccount() {
+    const account = getAccount()
+    console.log('wagmi get account:', account)
   }
 }
 

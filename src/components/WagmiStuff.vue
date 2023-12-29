@@ -2,6 +2,9 @@
 import { onMounted, ref } from 'vue'
 import wagmi from '@/utils/wagmi'
 
+// import { useAccountStore } from '@/stores/accountStore'
+// const accountStore = useAccountStore()
+
 const ethAmount = ref('0')
 const addressToSend = ref('')
 
@@ -19,20 +22,36 @@ onMounted(async () => {
 <template>
   <div>
     <h1>Wagmi</h1>
+    <h3>Connected Account: {{ web3Account }}</h3>
     <div>
       <button class="btn btn-primary" @click="wagmi.connect()">Connect</button>
+      <button class="btn btn-accent" @click="wagmi.disconnect()">Disconnect</button>
+      <button class="btn btn-secondary" @click="wagmi.switchNetwork(11155111)">
+        Switch Network (Sepolia)
+      </button>
     </div>
+
     <div>
       <h3>Send Eth</h3>
-      <input type="text" v-model="addressToSend" placeholder="Address" />
-      <input type="number" v-model="ethAmount" placeholder="Eth Amount" />
+      <input
+        class="input input-bordered"
+        type="text"
+        v-model="addressToSend"
+        placeholder="Address"
+      />
+      <input
+        class="input input-bordered"
+        type="number"
+        v-model="ethAmount"
+        placeholder="Eth Amount"
+      />
+      <button
+        class="btn btn-outline"
+        @click="wagmi.sendTransaction(addressToSend, ethAmount.toString())"
+      >
+        Send Ethereum
+      </button>
     </div>
-    <button
-      class="btn btn-outline"
-      @click="wagmi.sendTransaction(addressToSend, ethAmount.toString())"
-    >
-      Send Ethereum
-    </button>
     <button class="btn" @click="wagmi.signMessage('hello fools')">Sign Message</button>
   </div>
 </template>

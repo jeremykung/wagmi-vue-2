@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@wagmi/core": "^1.4.12",
+    "@web3modal/wagmi": "^3.5.3",
     "pinia": "^2.1.7",
     "viem": "^1.21.0",
     "vue": "^3.3.11",
